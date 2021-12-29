@@ -1,4 +1,3 @@
-from enum import IntFlag, auto
 from typing import List
 
 import clang.cindex
@@ -6,27 +5,6 @@ from jinja2 import Environment, BaseLoader
 
 jinja_env = Environment(loader=BaseLoader)  # jinja environment
 index = clang.cindex.Index.create()  # 创建编译器对象
-
-
-class CppTypes(IntFlag):
-    """
-    C++类型枚举
-    """
-    UNKNOWN = auto()  # 未知
-    STRING = auto()  # std::string
-    INT = auto()  # int
-
-    @property
-    def is_unknown(self):
-        return self is self.UNKNOWN
-
-    @property
-    def is_int(self):
-        return self is self.INT
-
-    @property
-    def is_string(self):
-        return self is self.STRING
 
 
 class StructModel:
@@ -41,7 +19,6 @@ class StructFieldModel:
         self.from_name = ''  # 源语言中的名称
         self.to_name = ''  # 目标语言的名称
         self.to_type_name = ''  # 目标语言的类型名称
-        self.from_type: CppTypes = CppTypes.UNKNOWN
 
 
 view_template = jinja_env.from_string("""
@@ -97,4 +74,3 @@ if __name__ == '__main__':
     model = StructModel()
     struct_node = list(translation_unit.cursor.get_children())[-1]
     print(controller(struct_node, model))
-    
