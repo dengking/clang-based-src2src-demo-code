@@ -47,17 +47,17 @@ def map_type(cpp_type_name: str):
 def controller(struct_node: clang.cindex.Cursor, model: StructModel) -> str:
     """
 
-    :param model:
-    :param struct_node:
+    :param model: struct model
+    :param struct_node: struct的AST
     :return:
     """
-    model.from_name = model.to_name = struct_node.spelling
+    model.from_name = model.to_name = struct_node.spelling  # 提取name
     for field_node in struct_node.get_children():
         field_model = StructFieldModel()
-        field_model.from_name = field_model.to_name = field_node.spelling
-        field_model.to_type_name = map_type(field_node.type.spelling)
+        field_model.from_name = field_model.to_name = field_node.spelling  # 提取name
+        field_model.to_type_name = map_type(field_node.type.spelling)  # 执行类型映射
         model.fields.append(field_model)
-    return view_template.render(m=model)
+    return view_template.render(m=model)  # 渲染模板
 
 
 cpp_code = """
